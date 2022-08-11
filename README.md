@@ -127,10 +127,62 @@ The second is a rational number in the sense of a manipulable number with which 
 
 Other than the list above, the only arithmetics operation not mentioned is negate, i.e. multiplying by -1. It is currently unclear whether negative numbers always operate correctly, but feel free to test it if you so desire, for example -1*e: `let minus_e = e.negate; console.log(minus_e.to_decimal_string(100));`  
 
-Given two number-objects, a and b, we can initialize a result number-object c as follows:
+Given two number-objects, a and b, we can initialize a result number-object c as follows:  
 Addition: `let c = a.add(b);`  
 Subtraction: `let c = a.sub(b);`  
 Division:  `let c = a.div(b);`  
 Multiplication:  `let c = a.mul(b);`  
 Multiplicative Inverse:  `let c = a.inverse();`  
 Square Root:  `let c = a.sqrt();`  
+
+### Remaining operations  
+
+Although it makes no sense to me why you would do so, if you desire for the result to be a normal JavaScript Number, use `.to_float(decimal_precision)`. decimal_precision should be an integer.  
+
+Given a number-objects you can deep-copy it by performing `.clone()`. Note that cloning means that computation done in one instance will not transfer to the other.  
+
+To see a summary of the internal state of the calculation in a number-object, there are two-methods:  
+`.to_text_string()`, recommended for deep analysis, which returns a full string description of the CF. Careful: Since we're dealing with very large BigInt's, it can get very big very quickly.  
+`.to_text_string2()`, recommended for casual analysis, which returns a smaller string description of the CF. Note: unlike to_text_string, the description is imprecise.  
+
+`.convergents(n, debug_if_this_is_slow_optional_argument)`, returns a series of fraction (from fr.Fractions) approximations ("convergents") by utilyzing the structure of a continued fraction.  
+
+#### *efficient arithmetic*
+
+The more "compound" a number-object is, that is to say - the more arithmetic operations were used in initializing it, the more difficult it will be to calculate new digits. Thus, while finding the first 15,000 digits of the constant e should take no more than 20 seconds, finding the even the first 100 digits of pi*pi + 3pi takes forever (long enough that I didn't bother to let it run its course). If we construct it as follows:  
+
+    let pi = cf.Constants.pi();  
+    let c = pi.mul(pi).add( pi.mul(cf.CF.make_cf_from_fraction(3,1)) );  
+    console.log(c.to_decimal_string(100));  
+
+There is a second reason why pi*pi + 3pi took so long: certain calculations take longer than others. In particular, any constant or trigonometric function based on an algebraic identity as a [Generalized Continued Fraction](https://en.wikipedia.org/wiki/Generalized_continued_fraction#Examples) is slower to converge, and that includes pi.  
+
+So how about improving by a little bit (or a huge amount actually)?  
+
+Given two number-objects `a` & `b`, and given 8 integers i1,...,i8, if we wish to find  
+(i1*a*b + i2*a + i3*b + i4) /  (i5*a*b + i6*a + i7*b + i8),  
+
+the most efficient way to do so is to initialize the result object "c" as follows:  
+
+    let c = cf.CF.make_second_composite_cf(a,b,i1,i2,i3,i4,i5,i6,i7,i8)  
+
+In fact, in general but not always, I implemented the four basic arithmetic operations (* + - /) using the same algorithm as `cf.CF.make_second_composite_cf`.    
+Thus, for addition, the calculator calls cf.CF.make_second_composite_cf with i2=i3=i8=1, and the rest of the i's equal 0.  
+For Division, the calculator calls cf.CF.make_second_composite_cf with i2=i7=1, and the rest of the i's equal 0.  
+Etc.  
+
+Let's return to pi*pi + 3pi, and let's aim higher this time - 1000 digits:  
+
+    let pi = cf.Constants.pi();  
+    let c = cf.CF.make_second_composite_cf(pi, pi, 1, 3, 0, 0, 0 , 0, 0, 1);  
+    console.log(c.to_decimal_string(100));  
+    
+On my machine it took around 12 seconds. Much better, right?
+
+Note: arithmetic operations between some number-object and a rational number object (one that is initialized using cf.CF.make_cf_from_fraction) are best performed using the previously introduced `.add, .sub, .div, .mul`, and **not** using the method make_second_composite_cf.
+
+Another note on time-complexity: calculating the square root of anything other than a rational number-object is very intensive. Use `.sqrt` as rarely as possible.
+
+
+
+***Amit Rubin + Mayer Goldberg, 2022***
