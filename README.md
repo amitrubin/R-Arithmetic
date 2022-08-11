@@ -13,7 +13,7 @@ The calculator is made up of two components.
 
 The first is a straight-forward fractions (rational numbers) calculator. It is implemented in the file *fractions.js*  
 
-However, the in this project I sought (under the guidance of professor Mayer Goldberg) to to include irrational numbers such as the squarer root of two, pi, cosh(1.234567), etc. Importantly, the results should always be as precisely accurate as we desire.
+However, in this project I sought (under the guidance of professor Mayer Goldberg) to to include irrational numbers such as the square root of two, pi, cosh(1.234567), etc. Importantly, the results should always be as precisely accurate as we desire.
 
 For this purpose we utilized infinite [Continued Fractions](https://en.wikipedia.org/wiki/Continued_fraction) as foundation. There is good reason to do so: continued fractions have great convergence properties, and many irrational numbers have known continued fraction identities. These are implemented in *continued_fractions.js*  
 
@@ -119,17 +119,18 @@ Now let's break that down:
  
 #### *Two kinds of rationals? Yes, sorry...*
 
-OK, so there are two kinds of rational number representations, as you might have noticed. The first, from *fractions.js*, should be used for only one purpose by you the user - as input for initializing constants from common functions, as we saw in **Example code 1**.  
+So... there are two kinds of rational number representations, as you might have noticed. The first, from *fractions.js*, should be used for only one purpose by you the user - as input for initializing constants from common functions, as we saw in **Example code 1**.  
 
-The second is a rational number in the sense of a manipulable number with which we can perform arithmetic/print, as we see in this example for 2/3. For such purposes we initialize number-objects using cf.CF.make_cf_from_fraction(numerator, decominator);  
+The second is a rational number in the sense of a manipulable number with which we can perform arithmetic/print, as we see in this example for the variable two_thirds. For such purposes we initialize number-objects using cf.CF.make_cf_from_fraction(numerator, decominator);  
 
 #### *The basic operations*
 
-Other than the list above, the only arithmetics operation not mentioned is negate, i.e. multiplying by -1. It is currently unclear whether it is guarenteed to operate correctly, but feel free to test it if you so desire, for example -1*e: `let minus_e = e.negate; console.log(minus_e.to_decimal_string(100))`;
+Other than the list above, the only arithmetics operation not mentioned is negate, i.e. multiplying by -1. It is currently unclear whether negative numbers always operate correctly, but feel free to test it if you so desire, for example -1*e: `let minus_e = e.negate; console.log(minus_e.to_decimal_string(100));`  
 
-Addition: e + (2/3)  
-Subtraction: e - (2/3)  
-Division: e / (2/3), i.e. 3e/2  
-Multiplication: e * (2/3)  
-Inverse: 1/e  
-Square Root: sqrt(e)  
+Given two number-objects, a and b, we can initialize a result number-object c as follows:
+Addition: `let c = a.add(b);`  
+Subtraction: `let c = a.sub(b);`  
+Division:  `let c = a.div(b);`  
+Multiplication:  `let c = a.mul(b);`  
+Multiplicative Inverse:  `let c = a.inverse();`  
+Square Root:  `let c = a.sqrt();`  
