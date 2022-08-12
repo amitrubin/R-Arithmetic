@@ -30,7 +30,7 @@ Let's find the first 100 digits of pi & of arctan(0.9):
 
     let a = cf.Constants.pi(); // the constant pi, i.e. 3.14159...  
 
-    let ninth = fr.Fraction.make_fraction_from_string("9/10")`; // you could also write fr.Fraction.make_fraction_from_bignums(9n,10n);  
+    let ninth = fr.Fraction.make_fraction_from_string("9/10"); // you could also write fr.Fraction.make_fraction_from_bignums(9n,10n);  
     let b = cf.Constants.arctan(ninth);
 
     let str1 = a.to_decimal_string(100);    
@@ -56,7 +56,7 @@ and there are factory methods for the rest: `cf.CF;`
 
 #### *Constants*
 
-The Constants class has factory methods that return new copies of mathematical constants. A full list of available methods is available in appendix 1 below, or by running console.log(cf.Constants.toString()).  
+The Constants class has factory methods that return new copies of mathematical constants. A full list of available methods is available by running console.log(cf.Constants.toString()).  
 
 Here are two examples, with and without parameters. First, pi:
 
@@ -147,7 +147,12 @@ To see a summary of the internal state of the calculation in a number-object, th
 
 `.convergents(n, debug_if_this_is_slow_optional_argument)`, returns a series of fraction (from fr.Fractions) approximations ("convergents") by utilyzing the structure of a continued fraction.  
 
-#### *efficient arithmetic*
+For a full list of operations run for either class the `.toString()` operation, i.e.  
+
+    console.log(cf.CF.toString());  
+    console.log(cf.Constants.toString());  
+
+### Efficient arithmetic
 
 The more "compound" a number-object is, that is to say - the more arithmetic operations were used in initializing it, the more difficult it will be to calculate new digits. Thus, while finding the first 15,000 digits of the constant e should take no more than 20 seconds, finding the even the first 100 digits of pi*pi + 3pi takes forever (long enough that I didn't bother to let it run its course). If we construct it as follows:  
 
@@ -164,7 +169,7 @@ Given two number-objects `a` & `b`, and given 8 integers i1,...,i8, if we wish t
 
 the most efficient way to do so is to initialize the result object "c" as follows:  
 
-    let c = cf.CF.make_second_composite_cf(a,b,i1,i2,i3,i4,i5,i6,i7,i8)  
+    let c = cf.CF.make_second_composite_cf(a,b,i1,i2,i3,i4,i5,i6,i7,i8);  
 
 In fact, in general but not always, I implemented the four basic arithmetic operations (* + - /) using the same algorithm as `cf.CF.make_second_composite_cf`.    
 Thus, for addition, the calculator calls cf.CF.make_second_composite_cf with i2=i3=i8=1, and the rest of the i's equal 0.  
@@ -177,12 +182,12 @@ Let's return to pi*pi + 3pi, and let's aim higher this time - 1000 digits:
     let c = cf.CF.make_second_composite_cf(pi, pi, 1, 3, 0, 0, 0 , 0, 0, 1);  
     console.log(c.to_decimal_string(100));  
     
-On my machine it took around 12 seconds. Much better, right?
+On my machine it took around 12 seconds. Much better, right?  
 
-Note: arithmetic operations between some number-object and a rational number object (one that is initialized using cf.CF.make_cf_from_fraction) are best performed using the previously introduced `.add, .sub, .div, .mul`, and **not** using the method make_second_composite_cf.
+Note: arithmetic operations between some number-object and a rational number object (one that is initialized using cf.CF.make_cf_from_fraction) are best performed using the previously introduced `.add, .sub, .div, .mul`, and **not** using the method make_second_composite_cf.  
 
-Another note on time-complexity: calculating the square root of anything other than a rational number-object is very intensive. Use `.sqrt` as rarely as possible.
+Another note on time-complexity: calculating the square root of anything other than a rational number-object is very intensive. Use `.sqrt` as rarely as possible.  
 
 
 
-***Amit Rubin + Mayer Goldberg, 2022***
+***Amit Rubin + Mayer Goldberg, 2022***  
