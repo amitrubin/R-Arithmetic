@@ -3,6 +3,21 @@
 This JavaScript library provides Arbitrarily Precise Calculations over real computable numbers.  
 
 E.g. give me the first 100 decimal digits of 3*e/pi: '2.5957679382967952616533243689382688522862338717255466183629908668441351337120311758957739875485535519'  
+
+## Table of contents
+
+[How to set up the library](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#how-to-set-up-the-library)
+
+[The Basics (Structure and Theory)](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#the-basics-structure-and-theory)
+
+[Guide](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#guide)
+
+- [Example code 1: getting an approximation](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#example-code-1-getting-an-approximation)
+
+- [Example code 2: Arithmetic](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#example-code-2-arithmetic)
+
+- 
+
 ## How to set up the library
 
 Simply download the two files (*fractions.js*, *continued_fractions.js*). Make sure you put them in the same directory.
@@ -135,7 +150,7 @@ Multiplication:  `let c = a.mul(b);`
 Multiplicative Inverse:  `let c = a.inverse();`  
 Square Root:  `let c = a.sqrt();`  
 
-### Remaining operations  
+### Other important operations  
 
 Although it makes no sense to me why you would do so, if you desire for the result to be a normal JavaScript Number, use `.to_float(decimal_precision)`. decimal_precision should be an integer.  
 
