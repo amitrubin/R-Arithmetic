@@ -20,6 +20,8 @@ E.g. give me the first 100 decimal digits of 3*e/pi: '2.595767938296795261653324
 
 - [Efficient arithmetic](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#efficient-arithmetic)
 
+- [Full Documentation](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#full-documentation)
+
 ## How to set up the library
 
 Simply download the two files (*fractions.js*, *continued_fractions.js*). Make sure you put them in the same directory.
