@@ -189,5 +189,105 @@ Note: arithmetic operations between some number-object and a rational number obj
 Another note on time-complexity: calculating the square root of anything other than a rational number-object is very intensive. Use `.sqrt` as rarely as possible.  
 
 
+### Full Documentation:
+
+#### CF
+
+(text copied from CF.toString()):
+
+	`COMMONLY USED FACTORY METHODS:
+	static make_cf_from_Fraction(frac), frac should be a Fraction object (from fraction.js).
+	static make_cf_from_fraction(numerator, denominator), 
+		examples: cf.CF.make_cf_from_fraction(13,2)  ->  FiniteCF { frac: Fraction { num: 13n, den: 2n } }.
+				  cf.CF.make_cf_from_fraction(-420n,130n)  ->  FiniteCF { frac: Fraction { num: -42n, den: 13n } }.
+		i.e. syntactic sugar for initializing a Fraction frac with num = numerator, den = denominator, and then calling make_cf_from_Fraction(frac).
+	static make_sqrt_of_fraction(num, den, b_, c_), returns square roots of rational numbers. 
+		den_, b_, c_,  are  optional parameters. 
+		Called with only the argument num: sqrt(num). 
+			For example, sqrt(3) = make_sqrt_of_fraction(3)  ->  PeriodicCF { lst_initial: [ 1n ], lst_periodic: [ 1n, 2n ] }
+		Called with only the arguments num & den: sqrt(num/den). 
+			For example, sqrt(1.5) = make_sqrt_of_fraction(3,2)  ->  PeriodicCF { lst_initial: [ 1n ], lst_periodic: [ 4n, 2n ] }
+		Called with all 4 argumentss: (sqrt(num/den)+b_) / (c_).
+			For example, the golden ratio = (sqrt(5) + 1)/2 = make_sqrt_of_fraction(5,1,1,2)  ->  PeriodicCF { lst_initial: [], lst_periodic: [ 1n ] }
+	static make_first_composite_cf(cf,a,b,c,d), 
+		i.e. (a*cf + b)/(c*cf + d), for a continued fraction cf.
+		Used for arithmetic operations.
+	static make_second_composite_cf(cfX,cfY,a,b,c,d,e,f,g,h), 
+		i.e. (a*cfX*cfY + b*cfX + c*cfY + d)/(e*cfX*cfY + f*cfX + g*cfY + h), for two continued fraction objects cfX, cfY.
+		Used for arithmetic operations.
+	static make_cf_from_method(function_from_nonnegative_indices_to_nonnegative_bigints), 
+		for example the constant e: make_cf_from_method((n) => (n===0) ? 2n : (n%3 !== 2) ? 1n : BigInt((2*n+2)/3))  ->  FormulaCF { formula: [Function] }
+		Useful for adding new continued fraction identities. Continued fraction identities can be found in the class Constants.
+
+	OTHER FACTORY METHODS:
+	static make_cf_from_integer_continued_fraction_array(num_arr), 
+		for example: 10/7 = 1 + 1/(2 + 1/3): make_cf_from_integer_continued_fraction_array([1,2,3])  ->  FiniteCF { frac: Fraction { num: 10n, den: 7n } }. 
+		If you wish to make a continued fraction from an infinitely repeating array, use make_cf_from_repeating_pattern instead.
+	static make_cf_from_integer(n), syntactic sugar for make_cf_from_fraction(n,1).
+	static make_cf_from_javascript_number(javascript_number, decimal_precision), 
+		examples: make_cf_from_javascript_number(0.0123456, 2) -> FiniteCF { frac: Fraction { num: 1n, den: 100n } }
+				  make_cf_from_javascript_number(-100.0123456, 2) -> FiniteCF { frac: Fraction { num: -10001n, den: 100n } }
+		This method exists for convinience, the unequivocal factory method make_cf_from_fraction is preferable.
+	static make_cf_from_repeating_pattern(initial_elements_list, repeating_elements_list), 
+		for example sqrt of(3): make_cf_from_repeating_pattern([1], [1,2])  ->  PeriodicCF { lst_initial: [ 1n ], lst_periodic: [ 1n, 2n ] }
+		The factory method make_sqrt_of_fraction makes this pointless in most cases - unless there's a specific value for which make_sqrt_of_fraction fails.
+
+
+	COMMONLY USED INSTANCE METHODS:
+	.clone(), note that cloning means that computation done in one instance will not transfer to the other.
+	.to_decimal_string(decimal_precision), for an integer decimal_precision. 
+		Calculates and returns as a string the first decimal_precision decimal points of the CF instance.
+		e.g. for e to the power of six we would have: 
+			e_6.to_decimal_string(4) -> '403.4288'
+			e_6.to_decimal_string(6) -> '403.428793'
+	.negate(), the cf multiplied by minus one (returns a continued fraction representing that).
+	.inverse(), one divided by the cf (returns a continued fraction representing that).
+	.add(cftoadd), cftoadd is a CF instance.
+		Returns a continued fraction representing this+cftoadd.
+	.sub(cftosub), cftosub is a CF instance, returns a continued fraction representing this-cftosub.
+	.mul(cftomult), cftomult is a CF instance.
+		Returns a continued fraction representing this*cftomult.
+	.div(cftodiv), cftodiv is a CF instance.
+		Returns a continued fraction representing this/cftodiv.
+	.sqrt(), returns the square root of the cf (returns a continued fraction representing that).
+	.to_text_string(), returns a string description of the CF. Careful: it can get very big very quickly.
+	.to_text_string2(), returns a smaller string description of the CF. Note: unlike to_text_string, the description is imprecise.
+
+	OTHER INSTANCE METHODS:
+	.to_float(decimal_precision), for an integer decimal_precision. 
+		Returns a javascript Number object approximation of the cf.
+	.element(i),
+		Use in CF classes except FiniteCF. Returns the i'th continued fraction series element as a Fraction.
+	.find_n_elements(n)
+		Finds the first n continued fraction series elements if they are not already known.
+	.add_Fraction(toadd), i.e. syntactic sugar for CF.make_cf_from_Fraction(toadd).add(this).
+	.add_fraction(num, den), , i.e. syntactic sugar for this.add_Fraction(make_fraction(num,den)).
+	.length() - Use in CF classes except FiniteCF. Returns the length of the known continued fraction series.
+	.convergents(n, debug_if_this_is_slow_optional_argument), returns a series of fraction approximations ("convergents").
+		Useful for demonstrations but computationaly expensive.`
+
+
+#### Constants
+
+(text copied from Constants.toString() - a list of factory methods):
+
+	`static e(), returns the constant e = 2.718...
+	static e_sqrd(), returns the constant e^2 = 7.389...
+	static pi(), returns the constant pi = 3.14159...
+	static golden_ratio(), returns the constant 1.618...
+	static e_1_n(n), e^(1/n) for a positive integer n.
+	static e_2_n(n), e^(2/n) for a positive odd integer n.
+	static tan1(), tan(1).
+	static tan_1_n(n), tan(1/n) for a positive integer n.
+	static tanh_1_n(n), tanh(1/n) for a positive integer n.
+	static e_x(x), e^x for a Fraction object or an integer x. It should NOT be a floating point number.
+	static ln_1_plus_x(x), ln(1+x) for a Fraction x s.t. |x|<1 .
+	static arctan(x), for a Fraction object or an integer x. It should NOT be a floating point number.
+	static sin(x), for a Fraction object or an integer x. It should NOT be a floating point number.
+	static cos(x), for a Fraction object or an integer x. It should NOT be a floating point number.
+	static arcsin(x), for a Fraction object or an integer x. It should NOT be a floating point number.
+	static sinh(x), for a Fraction object or an integer x. It should NOT be a floating point number.
+	static cosh(x), for a Fraction object or an integer x. It should NOT be a floating point number.`
+
 
 ***Amit Rubin + Mayer Goldberg, 2022***  
