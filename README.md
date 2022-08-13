@@ -16,7 +16,9 @@ E.g. give me the first 100 decimal digits of 3*e/pi: '2.595767938296795261653324
 
 - [Example code 2: Arithmetic](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#example-code-2-arithmetic)
 
-- 
+- [Other important operations](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#other-important-operations)
+
+- [Efficient arithmetic](https://github.com/amitrubin/R-Arithmetic/blob/main/README.md#efficient-arithmetic)
 
 ## How to set up the library
 
@@ -204,7 +206,7 @@ Note: arithmetic operations between some number-object and a rational number obj
 Another note on time-complexity: calculating the square root of anything other than a rational number-object is very intensive. Use `.sqrt` as rarely as possible.  
 
 
-### Full Documentation:
+### Full Documentation
 
 #### CF
 
