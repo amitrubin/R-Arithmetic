@@ -107,7 +107,7 @@ OK, let's put this to practice:
     let cf = require("./continued_fractions.js");  
     let fr = require("./fractions.js");  
 
-    let e = cf.Constants.e(); // the constant pi, i.e. 3.14159...  
+    let e = cf.Constants.e(); // the constant e, i.e. 2.7182...  
     let two_thirds = cf.CF.make_cf_from_fraction(2n,3n); //wait, what? read on...  
     
     // Addition: e + (2/3)  
@@ -144,7 +144,7 @@ The second is a rational number in the sense of a manipulable number with which 
 
 #### *The basic operations*
 
-Other than the list above, the only arithmetics operation not mentioned is negate, i.e. multiplying by -1. It is currently unclear whether negative numbers always operate correctly, but feel free to test it if you so desire, for example -1*e: `let minus_e = e.negate; console.log(minus_e.to_decimal_string(100));`  
+Other than the list above, the only arithmetics operation not mentioned is negate, i.e. multiplying by -1. It is currently unclear whether negative numbers always operate correctly, but feel free to test it if you so desire, for example -1*e: `let minus_e = e.negate(); console.log(minus_e.to_decimal_string(100));`  
 
 Given two number-objects, a and b, we can initialize a result number-object c as follows:  
 Addition: `let c = a.add(b);`  
@@ -173,26 +173,29 @@ For a full list of operations run for either class the `.toString()` operation, 
 
 ### Efficient arithmetic
 
-The more "compound" a number-object is, that is to say - the more arithmetic operations were used in initializing it, the more difficult it will be to calculate new digits. Thus, while finding the first 15,000 digits of the constant e should take no more than 20 seconds, finding the even the first 100 digits of pi*pi + 3pi takes forever (long enough that I didn't bother to let it run its course). If we construct it as follows:  
+The more "compound" a number-object is, that is to say - the more arithmetic operations were used in initializing it, the more difficult it will be to calculate new digits. Thus, while finding the first 15,000 digits of the constant e should take no more than 20 seconds, finding even the first 100 digits of pi*pi + 3pi takes forever (long enough that I didn't bother to let it run its course), assuming we construct it as we've seen so far:  
 
     let pi = cf.Constants.pi();  
     let c = pi.mul(pi).add( pi.mul(cf.CF.make_cf_from_fraction(3,1)) );  
     console.log(c.to_decimal_string(100));  
+    // a further note on efficiency - note that defining pi only once means that precision calculated for a single  
+    // instance of pi in the calculation is shared with all 3 appearances of pi in the above calculation. This bahavior  
+    // is very desirable, and should be followed wherver possible.
 
 There is a second reason why pi*pi + 3pi took so long: certain calculations take longer than others. In particular, any constant or trigonometric function based on an algebraic identity as a [Generalized Continued Fraction](https://en.wikipedia.org/wiki/Generalized_continued_fraction#Examples) is slower to converge, and that includes pi.  
 
 So how about improving by a little bit (or a huge amount actually)?  
 
-Given two number-objects `a` & `b`, and given 8 integers i1,...,i8, if we wish to find  
-(i1*a*b + i2*a + i3*b + i4) /  (i5*a*b + i6*a + i7*b + i8),  
+Given two number-objects `a` & `b`, and given 8 integers α,...,θ, if we wish to find  
 
+![](https://raw.githubusercontent.com/amitrubin/R-Arithmetic/main/second%20composite%20cf2.png)
+    
 the most efficient way to do so is to initialize the result object "c" as follows:  
 
-    let c = cf.CF.make_second_composite_cf(a,b,i1,i2,i3,i4,i5,i6,i7,i8);  
+    let c = cf.CF.make_second_composite_cf(a,b, α,β,γ,δ, ε,ζ,η,θ);  
 
 In fact, in general but not always, I implemented the four basic arithmetic operations (* + - /) using the same algorithm as `cf.CF.make_second_composite_cf`.    
-Thus, for addition, the calculator calls cf.CF.make_second_composite_cf with i2=i3=i8=1, and the rest of the i's equal 0.  
-For Division, the calculator calls cf.CF.make_second_composite_cf with i2=i7=1, and the rest of the i's equal 0.  
+Thus, for addition, the calculator calls cf.CF.make_second_composite_cf with β=γ=θ=1, and the rest of the coefficients equal 0.  
 Etc.  
 
 Let's return to pi*pi + 3pi, and let's aim higher this time - 1000 digits:  
