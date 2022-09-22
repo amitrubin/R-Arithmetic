@@ -179,7 +179,7 @@ The more "compound" a number-object is, that is to say - the more arithmetic ope
     let c = pi.mul(pi).add( pi.mul(cf.CF.make_cf_from_fraction(3,1)) );  
     console.log(c.to_decimal_string(100));  
     // a further note on efficiency - note that defining pi only once means that precision 
-    // calculated for a single instance of pi in the calculation is shared with all 3 appearances 
+    // calculated for the single instance of pi in the calculation is shared with all 3 appearances 
     // of pi in the above calculation. This bahavior is very desirable, and should be followed 
     // wherver possible.
 
