@@ -24,7 +24,7 @@ E.g. give me the first 100 decimal digits of 3*e/pi: '2.595767938296795261653324
 
 ## How to set up the library
 
-Simply download the two files (*fractions.js*, *continued_fractions.js*). Make sure you put them in the same directory.
+Simply download the three files (*fractions.js*, *continued_fractions.js*, *pc.js*). Make sure you put them in the same directory.
 
 ## The Basics (Structure and Theory)
 
